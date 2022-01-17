@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxTimer;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -49,7 +50,6 @@ class MainMenuState extends MusicBeatState
 
 	var bgThing:FlxSprite;
 
-	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
 	var debugKeys:Array<FlxKey>;
@@ -76,32 +76,18 @@ class MainMenuState extends MusicBeatState
 		persistentUpdate = persistentDraw = true;
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-		bg.scrollFactor.set(0, yScroll);
-		bg.setGraphicSize(Std.int(bg.width * 1.175 * scaleRatio));
-		bg.updateHitbox();
-		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.globalAntialiasing;
-		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollowPos = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 		add(camFollowPos);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-		magenta.scrollFactor.set(0, yScroll);
-		magenta.setGraphicSize(Std.int(magenta.width * 1.175 * scaleRatio));
-		magenta.updateHitbox();
-		magenta.screenCenter();
-		magenta.visible = false;
-		magenta.antialiasing = ClientPrefs.globalAntialiasing;
-		magenta.color = 0xFFfd719b;
-		add(magenta);
-
 		// magenta.scrollFactor.set();
 
-		bgThing = new FlxSprite(ClientPrefs.getResolution()[0] - 150, ClientPrefs.getResolution()[1] - 32).loadGraphic(Paths.image('mainmenu/bgthing'));
+		bgThing = new FlxSprite().loadGraphic(Paths.image('mainmenu/bgthing'));
+		bgThing.x = ClientPrefs.getResolution()[0] - bgThing.width;
+		bgThing.y = ClientPrefs.getResolution()[1] - bgThing.height;
+		bgThing.scrollFactor.set(0, yScroll);
 		bgThing.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bgThing);
 
@@ -224,9 +210,6 @@ class MainMenuState extends MusicBeatState
 				{
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
-
-					if (ClientPrefs.flashing)
-						FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
 					menuItems.forEach(function(spr:FlxSprite)
 					{

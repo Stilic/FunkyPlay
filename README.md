@@ -13,12 +13,12 @@ To install LuaJIT do this: `haxelib git linc_luajit https://github.com/AndreiRud
 ## Credits
 * Stilic - All the shit trolololol
 
-## Engine Credits
+## Psych Engine Credits
 * Shadow Mario - Coding
 * RiverOaken - Arts and Animations
 * bbpanzu - Assistant Coding
 
-### Engine Special Thanks
+### Psych Engine Special Thanks
 * shubs - New Input System
 * SqirraRNG - Chart Editor's Sound Waveform base code
 * iFlicky - Delay/Combo Menu Song Composer + Dialogue Sounds

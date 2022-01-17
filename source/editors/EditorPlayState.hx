@@ -267,32 +267,42 @@ class EditorPlayState extends MusicBeatState
 								sustainNote.scrollFactor.set();
 								unspawnNotes.push(sustainNote);
 
-								if (sustainNote.mustPress)
-								{
-									sustainNote.x += FlxG.width / 2; // general offset
-								}
-								else if (ClientPrefs.middleScroll)
-								{
-									sustainNote.x += 310;
-									if (daNoteData > 1)
-									{ // Up and Right
-										sustainNote.x += FlxG.width / 2 + 25;
-									}
+								// if (sustainNote.mustPress)
+								// {
+								// 	sustainNote.x += FlxG.width / 2; // general offset
+								// }
+								// else if (ClientPrefs.middleScroll)
+								// {
+								// 	sustainNote.x += 310;
+								// 	if (daNoteData > 1)
+								// 	{ // Up and Right
+								// 		sustainNote.x += FlxG.width / 2 + 25;
+								// 	}
+								// }
+								sustainNote.x += 310;
+								if (daNoteData > 1)
+								{ // Up and Right
+									sustainNote.x += FlxG.width / 2 + 25;
 								}
 							}
 						}
 
-						if (swagNote.mustPress)
+						// if (swagNote.mustPress)
+						// {
+						// 	swagNote.x += FlxG.width / 2; // general offset
+						// }
+						// else if (ClientPrefs.middleScroll)
+						// {
+						// 	swagNote.x += 310;
+						// 	if (daNoteData > 1) // Up and Right
+						// 	{
+						// 		swagNote.x += FlxG.width / 2 + 25;
+						// 	}
+						// }
+						swagNote.x += 310;
+						if (daNoteData > 1) // Up and Right
 						{
-							swagNote.x += FlxG.width / 2; // general offset
-						}
-						else if (ClientPrefs.middleScroll)
-						{
-							swagNote.x += 310;
-							if (daNoteData > 1) // Up and Right
-							{
-								swagNote.x += FlxG.width / 2 + 25;
-							}
+							swagNote.x += FlxG.width / 2 + 25;
 						}
 
 						if (!noteTypeMap.exists(swagNote.noteType))
@@ -476,7 +486,7 @@ class EditorPlayState extends MusicBeatState
 					{
 						time += 0.15;
 					}
-					StrumPlayAnim(true, Std.int(Math.abs(daNote.noteData)) % 4, time);
+					// StrumPlayAnim(true, Std.int(Math.abs(daNote.noteData)) % 4, time);
 					daNote.hitByOpponent = true;
 
 					if (!daNote.isSustainNote)
@@ -1018,14 +1028,7 @@ class EditorPlayState extends MusicBeatState
 			}
 			else
 			{
-				if (ClientPrefs.middleScroll)
-				{
-					babyArrow.x += 310;
-					if (i > 1)
-					{ // Up and Right
-						babyArrow.x += FlxG.width / 2 + 25;
-					}
-				}
+				babyArrow.visible = false;
 				opponentStrums.add(babyArrow);
 			}
 

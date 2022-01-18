@@ -1789,6 +1789,7 @@ class PlayState extends MusicBeatState
 						if (PlayState.isPixelStage)
 							countdownReady.setGraphicSize(Std.int(countdownReady.width * daPixelZoom));
 
+						countdownReady.cameras = [camHUD];
 						countdownReady.screenCenter();
 						countdownReady.antialiasing = antialias;
 						add(countdownReady);
@@ -1808,6 +1809,7 @@ class PlayState extends MusicBeatState
 						if (PlayState.isPixelStage)
 							countdownSet.setGraphicSize(Std.int(countdownSet.width * daPixelZoom));
 
+						countdownSet.cameras = [camHUD];
 						countdownSet.screenCenter();
 						countdownSet.antialiasing = antialias;
 						add(countdownSet);
@@ -1831,6 +1833,7 @@ class PlayState extends MusicBeatState
 
 							countdownGo.updateHitbox();
 
+							countdownGo.cameras = [camHUD];
 							countdownGo.screenCenter();
 							countdownGo.antialiasing = antialias;
 							add(countdownGo);

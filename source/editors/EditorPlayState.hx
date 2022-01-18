@@ -82,9 +82,9 @@ class EditorPlayState extends MusicBeatState
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_right'))
 		];
 
-		strumLine = new FlxSprite(PlayState.STRUM_X, 50).makeGraphic(FlxG.width, 10);
+		strumLine = new FlxSprite(PlayState.STRUM_X, PlayState.STRUM_Y).makeGraphic(FlxG.width, 10);
 		if (ClientPrefs.downScroll)
-			strumLine.y = FlxG.height - 150;
+			strumLine.y = FlxG.height - 170;
 		strumLine.scrollFactor.set();
 
 		comboGroup = new FlxTypedGroup<FlxSprite>();

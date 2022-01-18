@@ -66,7 +66,8 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
-	public static var STRUM_X = -278;
+	public static var STRUM_X = -272;
+	public static var STRUM_Y = 0;
 
 	public static var ratingStuff:Array<Dynamic> = [
 		['You Suck!', 0.2], // From 0% to 19%
@@ -137,6 +138,8 @@ class PlayState extends MusicBeatState
 	public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
 	public var eventNotes:Array<Dynamic> = [];
+
+	private var strumLineGrid:FlxSprite;
 
 	private var strumLine:FlxSprite;
 
@@ -899,9 +902,16 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
-		strumLine = new FlxSprite(STRUM_X, 50).makeGraphic(FlxG.width, 10);
+		// STOLEN FROM CHARTING STATE LMAO!!!!!
+		var GRID_SIZE_GAME:Int = Std.int(ChartingState.GRID_SIZE * 2.75);
+		strumLineGrid = FlxGridOverlay.create(GRID_SIZE_GAME, GRID_SIZE_GAME, GRID_SIZE_GAME * 4, Std.int(GRID_SIZE_GAME * 32));
+		strumLineGrid.alpha = 0.5;
+		strumLineGrid.screenCenter(X);
+		add(strumLineGrid);
+
+		strumLine = new FlxSprite(STRUM_X, STRUM_Y).makeGraphic(FlxG.width, 10);
 		if (ClientPrefs.downScroll)
-			strumLine.y = FlxG.height - 150;
+			strumLine.y = FlxG.height - 170;
 		strumLine.scrollFactor.set();
 
 		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
@@ -929,7 +939,7 @@ class PlayState extends MusicBeatState
 		timeBarBG.color = FlxColor.BLACK;
 		timeBarBG.xAdd = -4;
 		timeBarBG.yAdd = -4;
-		add(timeBarBG);
+		// add(timeBarBG);
 
 		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
 			'songPercent', 0, 1);
@@ -938,9 +948,9 @@ class PlayState extends MusicBeatState
 		timeBar.numDivisions = 800; // How much lag this causes?? Should i tone it down to idk, 400 or 200?
 		timeBar.alpha = 0;
 		timeBar.visible = showTime;
-		add(timeBar);
-		add(timeTxt);
-		timeBarBG.sprTracker = timeBar;
+		// add(timeBar);
+		// add(timeTxt);
+		// timeBarBG.sprTracker = timeBar;
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		add(strumLineNotes);
@@ -1077,10 +1087,9 @@ class PlayState extends MusicBeatState
 		botplayTxt.visible = cpuControlled;
 		add(botplayTxt);
 		if (ClientPrefs.downScroll)
-		{
 			botplayTxt.y = timeBarBG.y - 78;
-		}
 
+		strumLineGrid.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -2050,7 +2059,6 @@ class PlayState extends MusicBeatState
 				{
 					swagNote.x += FlxG.width / 2 + 25;
 				}
-
 				if (!noteTypeMap.exists(swagNote.noteType))
 				{
 					noteTypeMap.set(swagNote.noteType, true);
@@ -2148,16 +2156,7 @@ class PlayState extends MusicBeatState
 
 			var babyArrow:StrumNote = new StrumNote(STRUM_X, strumLine.y, i, player);
 			babyArrow.downScroll = ClientPrefs.downScroll;
-			if (!isStoryMode)
-			{
-				babyArrow.y -= 10;
-				babyArrow.alpha = 0;
-				FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: targetAlpha}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
-			}
-			else
-			{
-				babyArrow.alpha = targetAlpha;
-			}
+			babyArrow.alpha = targetAlpha;
 
 			if (player == 1)
 			{

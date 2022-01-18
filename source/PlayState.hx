@@ -202,6 +202,7 @@ class PlayState extends MusicBeatState
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
+	public var camBUB:FlxCamera;
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
@@ -333,18 +334,20 @@ class PlayState extends MusicBeatState
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
+		camBUB = new FlxCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
+		camBUB.bgColor.alpha = 0;
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camBUB);
 		FlxG.cameras.add(camHUD);
 		FlxG.cameras.add(camOther);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		FlxCamera.defaultCameras = [camGame];
-		CustomFadeTransition.nextCamera = camOther;
 		// FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		persistentUpdate = true;
@@ -885,6 +888,7 @@ class PlayState extends MusicBeatState
 
 		// TODO: let user choose his hud bg
 		HUDbg = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		HUDbg.screenCenter();
 		HUDbg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(HUDbg);
 
@@ -1101,7 +1105,7 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.downScroll)
 			botplayTxt.y = timeBarBG.y - 78;
 
-		HUDbg.cameras = [camHUD];
+		HUDbg.cameras = [camBUB];
 		strumLineGrid.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -2552,7 +2556,7 @@ class PlayState extends MusicBeatState
 				{
 					// gitaroo man easter egg
 					cancelMusicFadeTween();
-					CustomFadeTransition.nextCamera = camOther;
+					CustomFadeTransition.nextCamera = camHUD;
 					MusicBeatState.switchState(new GitarooPause());
 				}
 				else { */
@@ -2615,7 +2619,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			paused = true;
 			cancelMusicFadeTween();
-			CustomFadeTransition.nextCamera = camOther;
+			CustomFadeTransition.nextCamera = camHUD;
 			MusicBeatState.switchState(new CharacterEditorState(SONG.player2));
 		}
 
@@ -2672,6 +2676,7 @@ class PlayState extends MusicBeatState
 		if (camZooming)
 		{
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
+			camBUB.zoom = FlxMath.lerp(1, camBUB.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 		}
 
@@ -2972,7 +2977,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		paused = true;
 		cancelMusicFadeTween();
-		CustomFadeTransition.nextCamera = camOther;
+		CustomFadeTransition.nextCamera = camHUD;
 		MusicBeatState.switchState(new ChartingState());
 		chartingMode = true;
 
@@ -3278,6 +3283,7 @@ class PlayState extends MusicBeatState
 						hudZoom = 0.03;
 
 					FlxG.camera.zoom += camZoom;
+					camBUB.zoom += camZoom;
 					camHUD.zoom += hudZoom;
 				}
 
@@ -3684,7 +3690,7 @@ class PlayState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 
 					cancelMusicFadeTween();
-					CustomFadeTransition.nextCamera = camOther;
+					CustomFadeTransition.nextCamera = camHUD;
 					if (FlxTransitionableState.skipNextTransIn)
 					{
 						CustomFadeTransition.nextCamera = null;
@@ -3753,7 +3759,7 @@ class PlayState extends MusicBeatState
 			{
 				trace('WENT BACK TO FREEPLAY??');
 				cancelMusicFadeTween();
-				CustomFadeTransition.nextCamera = camOther;
+				CustomFadeTransition.nextCamera = camHUD;
 				if (FlxTransitionableState.skipNextTransIn)
 				{
 					CustomFadeTransition.nextCamera = null;
@@ -4643,11 +4649,13 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.camZooms)
 		{
 			FlxG.camera.zoom += 0.015;
+			camBUB.zoom += 0.015;
 			camHUD.zoom += 0.03;
 
 			if (!camZooming)
 			{ // Just a way for preventing it to be permanently zoomed until Skid & Pump hits a note
 				FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.5);
+				FlxTween.tween(camBUB, {zoom: defaultCamZoom}, 0.5);
 				FlxTween.tween(camHUD, {zoom: 1}, 0.5);
 			}
 		}
@@ -4805,6 +4813,7 @@ class PlayState extends MusicBeatState
 		if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms && curBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.015;
+			camBUB.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
 

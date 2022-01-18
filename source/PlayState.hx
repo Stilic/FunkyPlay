@@ -905,13 +905,18 @@ class PlayState extends MusicBeatState
 		// STOLEN FROM CHARTING STATE LMAO!!!!!
 		var GRID_SIZE_GAME:Int = Std.int(ChartingState.GRID_SIZE * 2.75);
 		strumLineGrid = FlxGridOverlay.create(GRID_SIZE_GAME, GRID_SIZE_GAME, GRID_SIZE_GAME * 4, Std.int(GRID_SIZE_GAME * 32));
-		strumLineGrid.alpha = 0.5;
+		strumLineGrid.alpha = 0.75;
 		strumLineGrid.screenCenter(X);
 		add(strumLineGrid);
 
 		strumLine = new FlxSprite(STRUM_X, STRUM_Y).makeGraphic(FlxG.width, 10);
 		if (ClientPrefs.downScroll)
 			strumLine.y = FlxG.height - 170;
+		// TODO: find a way to unharcode strum line offsets
+		if (PlayState.isPixelStage) {
+			strumLine.x += 50;
+			strumLine.y += 5;
+		}
 		strumLine.scrollFactor.set();
 
 		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
@@ -2156,6 +2161,9 @@ class PlayState extends MusicBeatState
 
 			var babyArrow:StrumNote = new StrumNote(STRUM_X, strumLine.y, i, player);
 			babyArrow.downScroll = ClientPrefs.downScroll;
+			// b i t c h
+			if (PlayState.isPixelStage)
+				babyArrow.x += 3;
 			babyArrow.alpha = targetAlpha;
 
 			if (player == 1)

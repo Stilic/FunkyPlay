@@ -163,6 +163,8 @@ class PlayState extends MusicBeatState
 	public var health:Float = 1;
 	public var combo:Int = 0;
 
+	private var HUDbg:FlxSprite;
+
 	private var healthBarBG:AttachedSprite;
 
 	public var healthBar:FlxBar;
@@ -881,6 +883,11 @@ class PlayState extends MusicBeatState
 				insert(members.indexOf(dadGroup) - 1, evilTrail);
 		}
 
+		// TODO: let user choose his hud bg
+		HUDbg = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		HUDbg.antialiasing = ClientPrefs.globalAntialiasing;
+		add(HUDbg);
+
 		var file:String = Paths.json(songName + '/dialogue'); // Checks for json/Psych Engine dialogue
 		if (OpenFlAssets.exists(file))
 		{
@@ -1094,6 +1101,7 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.downScroll)
 			botplayTxt.y = timeBarBG.y - 78;
 
+		HUDbg.cameras = [camHUD];
 		strumLineGrid.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
